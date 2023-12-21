@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Skiss</string>
+    <string-array name="demo_array">
+        <item>Meta-gravity</item>
+        <item>Grodyngel</item>
+        <item>Metaballs</item>
+        <item>Basic Demo</item>
+        <item>Lissajoux</item>
+    </string-array>
 </resources>

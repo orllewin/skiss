@@ -14,12 +14,7 @@ data class Vektor(var x: Float, var y: Float) {
         }
 
         fun randomDirection(): Vektor {
-            val direction = Vektor(
-                random(
-                    -1f,
-                    1f
-                ), random(-1f, 1f)
-            )
+            val direction = Vektor(random(-10f, 10f), random(-10f, 10f))
             direction.normalise()
             return direction
         }

@@ -4,6 +4,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import oppen.skiss.lib.objects.Coord
 
+const val TWO_PI = 6.2831855f
+
 abstract class SkissSyntaxBase {
 
     class SkissPaint(var active: Boolean = false): Paint(){
@@ -24,7 +26,15 @@ abstract class SkissSyntaxBase {
     var width = -1
     var height = -1
 
+    var xT = 0//x translate
+    var yT = 0//y translate
+
     var canvas: Canvas? = null
+
+    fun translate(x: Int, y: Int){
+        xT = x
+        yT = y
+    }
 
     fun background(color: Int){
         canvas?.drawColor(color)
@@ -82,49 +92,75 @@ abstract class SkissSyntaxBase {
         strokePaint.active = false
     }
 
+    /**
+     *
+     * Drawing Operations
+     *
+     */
+
     fun line(x1: Number, y1: Number, x2: Number, y2: Number){
         strokePaint.draw {
-            canvas?.drawLine(x1.toFloat(), y1.toFloat(),x2.toFloat(), y2.toFloat(), strokePaint)
+            canvas?.drawLine(
+                xT + x1.toFloat(),
+                yT + y1.toFloat(),
+                xT + x2.toFloat(),
+                yT + y2.toFloat(), strokePaint)
         }
     }
 
     fun lines(lines: List<Pair<Coord, Coord>>){
         strokePaint.draw {
             canvas?.drawLines(lines.flatMap {
-                arrayListOf(it.first.x, it.first.y, it.second.x, it.second.y)
+                arrayListOf(it.first.x + xT, it.first.y + yT, it.second.x + xT, it.second.y + yT)
             }.toFloatArray(), strokePaint)
         }
     }
 
     fun circle(x: Number, y: Number, radius: Number){
         strokePaint.draw {
-            canvas?.drawCircle(x.toFloat(), y.toFloat(), radius.toFloat(), strokePaint)
+            canvas?.drawCircle(xT + x.toFloat(), yT + y.toFloat(), radius.toFloat(), strokePaint)
         }
         fillPaint.draw{
-            canvas?.drawCircle(x.toFloat(), y.toFloat(), radius.toFloat(), fillPaint)
+            canvas?.drawCircle(xT + x.toFloat(), yT + y.toFloat(), radius.toFloat(), fillPaint)
         }
     }
 
     fun square(x: Number, y: Number, diameter: Number){
         strokePaint.draw {
-            canvas?.drawRect(x.toFloat(), y.toFloat(), (x.toFloat() + diameter.toFloat()),(y.toFloat() + diameter.toFloat()),  strokePaint)
+            canvas?.drawRect(
+                xT + x.toFloat(),
+                yT + y.toFloat(),
+                (x.toFloat() + diameter.toFloat() + xT),
+                (y.toFloat() + diameter.toFloat() + yT),  strokePaint)
         }
         fillPaint.draw{
-            canvas?.drawRect(x.toFloat(), y.toFloat(), (x.toFloat() + diameter.toFloat()),(y.toFloat() + diameter.toFloat()),  fillPaint)
+            canvas?.drawRect(
+                xT + x.toFloat(),
+                yT + y.toFloat(),
+                (x.toFloat() + diameter.toFloat() + xT),
+                (y.toFloat() + diameter.toFloat() + yT),  fillPaint)
         }
     }
 
     fun points(points: List<Coord>){
         strokePaint.draw {
             canvas?.drawPoints(points.flatMap {
-                arrayListOf(it.x, it.y)
+                arrayListOf(it.x + xT, it.y + yT)
             }.toFloatArray(), strokePaint)
+        }
+    }
+
+    fun point(x: Int, y: Int) = point(x.toFloat(), y.toFloat())
+
+    fun point(x: Float, y: Float){
+        fillPaint.draw {
+            canvas?.drawPoint(xT + x.toFloat(), yT + y.toFloat(), strokePaint)
         }
     }
 
     fun point(point: Coord){
         strokePaint.draw {
-            canvas?.drawPoint(point.x, point.y, strokePaint)
+            canvas?.drawPoint(xT + point.x, yT + point.y, strokePaint)
         }
     }
 }

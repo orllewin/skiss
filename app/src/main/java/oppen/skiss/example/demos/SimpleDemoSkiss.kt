@@ -1,4 +1,4 @@
-package oppen.skiss.example
+package oppen.skiss.example.demos
 
 import android.graphics.Canvas
 import oppen.skiss.lib.Skiss
@@ -6,7 +6,7 @@ import oppen.skiss.lib.SkissView
 import oppen.skiss.lib.color
 import oppen.skiss.lib.random
 
-class DemoSkiss(view: SkissView): Skiss(view) {
+class SimpleDemoSkiss(view: SkissView, private val onTouch: () -> Unit): Skiss(view) {
 
     private val background = color("#1d1d1d")
     private val red = color("#ff0000")
@@ -29,5 +29,9 @@ class DemoSkiss(view: SkissView): Skiss(view) {
         repeat(100) {
             circle(random(width), random(height), random(5, 40))
         }
+    }
+
+    override fun onTouch(x: Int, y: Int) {
+        onTouch.invoke()
     }
 }

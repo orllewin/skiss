@@ -5,10 +5,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/root"
+    android:clickable="true"
+    android:focusable="true"
+    android:keepScreenOn="true"
     tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <ImageView
+            android:id="@+id/oppen_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/skiss_logo"
+            android:layout_centerVertical="true"/>
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/demo_selection_dropdown"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:paddingLeft="16dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/oppen_logo"/>
+
+    </RelativeLayout>
 
     <oppen.skiss.lib.SkissView
         android:id="@+id/skiss_view"
+        android:layout_above="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

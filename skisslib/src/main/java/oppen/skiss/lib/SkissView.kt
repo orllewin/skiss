@@ -12,6 +12,11 @@ class SkissView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0): View(context, attrs, defStyleAttr), Choreographer.FrameCallback {
 
+    companion object{
+        var w: Int = -1
+        var h: Int = -1
+    }
+
     private var onSetup: (width: Int, height: Int) -> Unit? = {_,_->}
     private var onTouch: (x: Int, y: Int) -> Unit? = {_,_->}
     private var onDraw: (canvas: Canvas?) -> Unit? = {_->}
@@ -33,7 +38,14 @@ class SkissView @JvmOverloads constructor(
         }
     }
 
-    fun start() = Choreographer.getInstance().postFrameCallback(this)
+    fun start(){
+        onSetup.invoke(w, h)
+        initialised = true
+        Choreographer.getInstance().postFrameCallback(this)
+    }
+    fun stop() = Choreographer.getInstance().removeFrameCallback(this)
+    fun pause() = stop()
+    fun unpause() = Choreographer.getInstance().postFrameCallback(this)
 
     fun setup(onSetup: (width: Int, height: Int) -> Unit?){
         this.onSetup = onSetup
@@ -54,12 +66,10 @@ class SkissView @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        when {
-            w != oldw && h != oldh -> {
-                onSetup.invoke(w, h)
-                initialised = true
-            }
-        }
+        SkissView.w = w
+        SkissView.h = h
+        onSetup.invoke(w, h)
+        initialised = true
     }
 
     override fun onDraw(canvas: Canvas?) {
